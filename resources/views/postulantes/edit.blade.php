@@ -1,4 +1,5 @@
 @extends('layouts.app')
+<!-- Vista de CU6: Gestionar postulantes. Formulario para actualizar postulantes. -->
 
 @section('titulo', 'Editar Postulante: ' . $postulante->nombres)
 

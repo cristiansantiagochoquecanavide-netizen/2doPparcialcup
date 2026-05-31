@@ -5,6 +5,10 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 
+/**
+ * Modelo Bitacora.
+ * Representa la tabla bitacora y participa en CU5 como registro de auditoria.
+ */
 class Bitacora extends Model
 {
     use HasFactory;
@@ -25,7 +29,7 @@ class Bitacora extends Model
         'fecha_hora' => 'datetime'
     ];
 
-    // Relaciones
+    // Cada registro de bitacora pertenece al usuario que ejecuto la accion.
     public function usuario()
     {
         return $this->belongsTo(Usuario::class, 'id_usuario');

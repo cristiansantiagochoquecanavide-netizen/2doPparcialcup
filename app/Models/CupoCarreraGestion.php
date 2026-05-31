@@ -5,6 +5,10 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 
+/**
+ * Modelo CupoCarreraGestion.
+ * Representa la tabla cupo_carrera_gestion y participa en CU10.
+ */
 class CupoCarreraGestion extends Model
 {
     use HasFactory;
@@ -23,12 +27,13 @@ class CupoCarreraGestion extends Model
         'cupo_maximo' => 'integer'
     ];
 
-    // Relaciones
+    // Cada cupo pertenece a una carrera.
     public function carrera()
     {
         return $this->belongsTo(Carrera::class, 'id_carrera');
     }
 
+    // Cada cupo pertenece a una gestion academica.
     public function gestion()
     {
         return $this->belongsTo(GestionAcademica::class, 'id_gestion');

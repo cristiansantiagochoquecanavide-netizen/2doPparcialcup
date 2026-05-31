@@ -1,4 +1,5 @@
 @extends('layouts.app')
+<!-- Vista de CU7: Validar requisitos. Consulta de detalle del requisito. -->
 
 @section('titulo', 'Ver Requisito: ' . $requisito->nombre)
 

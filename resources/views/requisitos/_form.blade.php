@@ -1,3 +1,4 @@
+<!-- Seccion de formulario reutilizable para crear y editar requisitos del CU7. -->
 <div class="mb-3">
     <label for="nombre" class="form-label">
         <i class="bi bi-tag"></i> Nombre del requisito

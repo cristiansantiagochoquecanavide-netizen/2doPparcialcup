@@ -1,4 +1,5 @@
 @extends('layouts.app')
+<!-- Vista de CU4: Gestionar roles. Consulta de rol, permisos y usuarios asociados. -->
 
 @section('titulo', 'Ver Rol: ' . $rol->nombre)
 

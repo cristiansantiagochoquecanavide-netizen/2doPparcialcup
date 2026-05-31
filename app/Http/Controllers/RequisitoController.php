@@ -8,10 +8,15 @@ use App\Models\Requisito;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
+/**
+ * Controlador del CU7: Validar requisitos del postulante.
+ * Administra requisitos y registra la validacion documental de postulantes.
+ */
 class RequisitoController extends Controller
 {
     /**
-     * Listar todos los requisitos
+     * Muestra el listado de requisitos registrados.
+     * Corresponde al flujo ListarRequisitos() del CU7.
      */
     public function index()
     {
@@ -28,7 +33,8 @@ class RequisitoController extends Controller
     }
 
     /**
-     * Mostrar formulario para crear requisito
+     * Muestra el formulario de registro de requisito.
+     * Corresponde al flujo CrearRequisito() del CU7.
      */
     public function create()
     {
@@ -41,7 +47,8 @@ class RequisitoController extends Controller
     }
 
     /**
-     * Guardar nuevo requisito
+     * Registra un nuevo requisito documental.
+     * Corresponde al flujo GuardarRequisito() del CU7.
      */
     public function store(Request $request)
     {
@@ -49,6 +56,7 @@ class RequisitoController extends Controller
             $validado = $request->validate($this->rules());
             $requisito = Requisito::create($validado);
 
+            // Registra en bitacora la creacion de un requisito, correspondiente al CU7.
             $this->registrarBitacora(
                 'CREAR',
                 'Requisito ' . $requisito->nombre . ' creado exitosamente'
@@ -64,7 +72,8 @@ class RequisitoController extends Controller
     }
 
     /**
-     * Mostrar detalles de un requisito
+     * Muestra la informacion y postulantes asociados al requisito.
+     * Corresponde al flujo ConsultarRequisito() del CU7.
      */
     public function show($id)
     {
@@ -81,7 +90,8 @@ class RequisitoController extends Controller
     }
 
     /**
-     * Mostrar formulario para editar requisito
+     * Muestra el formulario de edicion de requisito.
+     * Corresponde al flujo EditarRequisito() del CU7.
      */
     public function edit($id)
     {
@@ -98,7 +108,8 @@ class RequisitoController extends Controller
     }
 
     /**
-     * Actualizar requisito
+     * Actualiza datos, obligatoriedad y estado del requisito.
+     * Corresponde al flujo ActualizarRequisito() del CU7.
      */
     public function update(Request $request, $id)
     {
@@ -108,6 +119,7 @@ class RequisitoController extends Controller
 
             $requisito->update($validado);
 
+            // Registra en bitacora la actualizacion de un requisito, correspondiente al CU7.
             $this->registrarBitacora(
                 'ACTUALIZAR',
                 'Requisito ' . $requisito->nombre . ' actualizado'
@@ -123,7 +135,8 @@ class RequisitoController extends Controller
     }
 
     /**
-     * Eliminar requisito
+     * Elimina un requisito sin postulantes asociados.
+     * Corresponde al flujo EliminarRequisito() del CU7.
      */
     public function destroy($id)
     {
@@ -136,6 +149,7 @@ class RequisitoController extends Controller
                     ->with('error', 'No se puede eliminar el requisito porque ya fue asignado a postulantes');
             }
 
+            // Registra en bitacora la eliminacion de un requisito, correspondiente al CU7.
             $this->registrarBitacora(
                 'ELIMINAR',
                 'Requisito ' . $nombreRequisito . ' eliminado del sistema'
@@ -152,7 +166,8 @@ class RequisitoController extends Controller
     }
 
     /**
-     * Mostrar formulario para validar requisitos de un postulante
+     * Muestra la matriz de requisitos activos para un postulante.
+     * Corresponde al flujo ValidarRequisitosPostulante() del CU7.
      */
     public function validarPostulante($id)
     {
@@ -171,7 +186,8 @@ class RequisitoController extends Controller
     }
 
     /**
-     * Guardar validacion de requisitos de un postulante
+     * Guarda la validacion documental y actualiza el estado del postulante.
+     * Corresponde al flujo GuardarValidacionRequisitos() del CU7.
      */
     public function guardarValidacion(Request $request, $id)
     {
@@ -213,6 +229,7 @@ class RequisitoController extends Controller
 
             $postulante->update(['estado' => $estado]);
 
+            // Registra en bitacora la validacion de requisitos, correspondiente al CU7.
             $this->registrarBitacora(
                 'VALIDAR POSTULANTE',
                 'Requisitos del postulante ' . $postulante->nombres . ' validados. Estado: ' . $estado

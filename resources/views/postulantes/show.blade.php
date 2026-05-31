@@ -1,4 +1,5 @@
 @extends('layouts.app')
+<!-- Vista de CU6: Gestionar postulantes. Consulta de datos y relaciones del postulante. -->
 
 @section('titulo', 'Ver Postulante: ' . $postulante->nombres . ' ' . $postulante->apellidos)
 

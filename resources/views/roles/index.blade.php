@@ -1,4 +1,5 @@
 @extends('layouts.app')
+<!-- Vista de CU4: Gestionar roles. Muestra tabla y acciones del CRUD de roles. -->
 
 @section('titulo', 'Gestión de Roles')
 

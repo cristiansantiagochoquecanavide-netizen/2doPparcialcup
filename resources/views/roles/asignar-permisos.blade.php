@@ -1,4 +1,5 @@
 @extends('layouts.app')
+<!-- Vista de CU4: Asignar permisos. Permite vincular permisos a un rol. -->
 
 @section('titulo', 'Asignar Permisos: ' . $rol->nombre)
 

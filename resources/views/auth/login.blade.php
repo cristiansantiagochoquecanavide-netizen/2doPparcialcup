@@ -1,4 +1,5 @@
 @extends('layouts.app')
+<!-- Vista de CU1: Iniciar sesion. Presenta el formulario de autenticacion. -->
 
 @section('titulo', 'Iniciar Sesión')
 

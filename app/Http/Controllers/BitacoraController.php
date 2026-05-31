@@ -6,10 +6,15 @@ use App\Models\Bitacora;
 use App\Models\Usuario;
 use Illuminate\Http\Request;
 
+/**
+ * Controlador del CU5: Ver bitacora de acciones y auditoria.
+ * Permite listar, consultar, filtrar y depurar registros de auditoria.
+ */
 class BitacoraController extends Controller
 {
     /**
-     * Listar todas las bitácoras
+     * Muestra el listado paginado de acciones auditadas.
+     * Corresponde al flujo ListarBitacora() del CU5.
      */
     public function index()
     {
@@ -28,7 +33,8 @@ class BitacoraController extends Controller
     }
 
     /**
-     * Mostrar detalles de una entrada de bitácora
+     * Muestra el detalle de una accion registrada en auditoria.
+     * Corresponde al flujo ConsultarBitacora() del CU5.
      */
     public function show($id)
     {
@@ -45,7 +51,8 @@ class BitacoraController extends Controller
     }
 
     /**
-     * Filtrar bitácoras por criterios
+     * Filtra acciones auditadas por usuario, modulo, accion, fecha o descripcion.
+     * Corresponde al flujo FiltrarBitacora() del CU5.
      */
     public function filtrar(Request $request)
     {
@@ -103,7 +110,8 @@ class BitacoraController extends Controller
     }
 
     /**
-     * Exportar bitácora (opcional - para futuro)
+     * Reserva el punto de extension para exportar registros de auditoria.
+     * Corresponde al flujo ExportarBitacora() del CU5.
      */
     public function exportarExcel()
     {
@@ -118,7 +126,8 @@ class BitacoraController extends Controller
     }
 
     /**
-     * Limpiar bitácora antigua (mayor a X días)
+     * Elimina registros de auditoria anteriores al rango configurado.
+     * Corresponde al flujo LimpiarBitacora() del CU5.
      */
     public function limpiarAntiguos(Request $request)
     {

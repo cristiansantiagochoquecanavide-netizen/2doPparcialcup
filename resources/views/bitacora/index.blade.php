@@ -1,4 +1,5 @@
 @extends('layouts.app')
+<!-- Vista de CU5: Ver bitacora. Muestra tabla de acciones auditadas. -->
 
 @section('titulo', 'Bitácora del Sistema')
 

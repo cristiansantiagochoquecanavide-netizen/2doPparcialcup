@@ -1,4 +1,5 @@
 @extends('layouts.app')
+<!-- Vista de CU4: Gestionar roles. Formulario para actualizar roles. -->
 
 @section('titulo', 'Editar Rol: ' . $rol->nombre)
 

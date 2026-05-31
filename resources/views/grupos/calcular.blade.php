@@ -1,4 +1,5 @@
 @extends('layouts.app')
+<!-- Vista de CU12: Gestionar grupos. Calcula la cantidad estimada de grupos. -->
 
 @section('titulo', 'Calcular Cantidad de Grupos')
 

@@ -1,4 +1,5 @@
 @extends('layouts.app')
+<!-- Vista de CU14: Gestionar docentes. Muestra tabla y acciones del CRUD de docentes. -->
 
 @section('titulo', 'Gestion de Docentes')
 

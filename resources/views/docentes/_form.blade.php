@@ -1,3 +1,4 @@
+<!-- Seccion de formulario reutilizable para crear y editar docentes del CU14. -->
 @php
     $estadosContratacion = [
         'ACTIVO' => 'Activo',

@@ -1,4 +1,5 @@
 @extends('layouts.app')
+<!-- Vista de CU10: Gestionar carreras. Consulta de detalle y estadisticas de carrera. -->
 
 @section('titulo', 'Ver Carrera: ' . $carrera->nombre)
 

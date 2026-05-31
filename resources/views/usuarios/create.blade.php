@@ -1,4 +1,5 @@
 @extends('layouts.app')
+<!-- Vista de CU3: Gestionar usuarios. Formulario para registrar usuarios. -->
 
 @section('titulo', 'Crear Usuario')
 

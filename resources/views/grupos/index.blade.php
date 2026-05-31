@@ -1,4 +1,5 @@
 @extends('layouts.app')
+<!-- Vista de CU12: Gestionar grupos. Muestra tabla y acciones del CRUD de grupos. -->
 
 @section('titulo', 'Gestion de Grupos')
 

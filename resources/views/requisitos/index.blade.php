@@ -1,4 +1,5 @@
 @extends('layouts.app')
+<!-- Vista de CU7: Validar requisitos. Muestra requisitos configurados para postulantes. -->
 
 @section('titulo', 'Gestion de Requisitos')
 

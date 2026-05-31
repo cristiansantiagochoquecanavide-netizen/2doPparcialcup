@@ -1,4 +1,5 @@
 @extends('layouts.app')
+<!-- Vista de CU14: Gestionar docentes. Consulta de detalle y cargas del docente. -->
 
 @section('titulo', 'Ver Docente: ' . $docente->nombres . ' ' . $docente->apellidos)
 

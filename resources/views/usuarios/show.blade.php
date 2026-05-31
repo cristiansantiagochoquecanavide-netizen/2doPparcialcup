@@ -1,4 +1,5 @@
 @extends('layouts.app')
+<!-- Vista de CU3: Gestionar usuarios. Consulta de detalle del usuario. -->
 
 @section('titulo', 'Ver Usuario: ' . $usuario->nombre_usuario)
 

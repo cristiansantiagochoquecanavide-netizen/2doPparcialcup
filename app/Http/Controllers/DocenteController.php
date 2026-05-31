@@ -7,12 +7,17 @@ use App\Models\Docente;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
+/**
+ * Controlador del CU14: Gestionar docentes.
+ * Permite registrar, consultar, actualizar, filtrar y cambiar estado de docentes.
+ */
 class DocenteController extends Controller
 {
     private const ESTADOS_CONTRATACION = 'ACTIVO,INACTIVO,LICENCIA,JUBILADO';
 
     /**
-     * Listar todos los docentes
+     * Muestra el listado de docentes registrados.
+     * Corresponde al flujo ListarDocentes() del CU14.
      */
     public function index()
     {
@@ -29,7 +34,8 @@ class DocenteController extends Controller
     }
 
     /**
-     * Mostrar formulario para crear docente
+     * Muestra el formulario de registro de docente.
+     * Corresponde al flujo CrearDocente() del CU14.
      */
     public function create()
     {
@@ -42,7 +48,8 @@ class DocenteController extends Controller
     }
 
     /**
-     * Guardar nuevo docente
+     * Registra un nuevo docente.
+     * Corresponde al flujo GuardarDocente() del CU14.
      */
     public function store(Request $request)
     {
@@ -52,6 +59,7 @@ class DocenteController extends Controller
 
             $docente = Docente::create($validado);
 
+            // Registra en bitacora la creacion de un docente, correspondiente al CU14.
             $this->registrarBitacora(
                 'CREAR',
                 'Docente ' . $docente->nombres . ' ' . $docente->apellidos . ' registrado'
@@ -67,7 +75,8 @@ class DocenteController extends Controller
     }
 
     /**
-     * Mostrar detalles de un docente
+     * Muestra datos y estadisticas de carga horaria del docente.
+     * Corresponde al flujo ConsultarDocente() del CU14.
      */
     public function show($id)
     {
@@ -92,7 +101,8 @@ class DocenteController extends Controller
     }
 
     /**
-     * Mostrar formulario para editar docente
+     * Muestra el formulario de edicion de docente.
+     * Corresponde al flujo EditarDocente() del CU14.
      */
     public function edit($id)
     {
@@ -109,7 +119,8 @@ class DocenteController extends Controller
     }
 
     /**
-     * Actualizar docente
+     * Actualiza datos personales, formacion y estado contractual.
+     * Corresponde al flujo ActualizarDocente() del CU14.
      */
     public function update(Request $request, $id)
     {
@@ -119,6 +130,7 @@ class DocenteController extends Controller
 
             $docente->update($validado);
 
+            // Registra en bitacora la actualizacion de un docente, correspondiente al CU14.
             $this->registrarBitacora(
                 'ACTUALIZAR',
                 'Docente ' . $docente->nombres . ' ' . $docente->apellidos . ' actualizado'
@@ -134,7 +146,8 @@ class DocenteController extends Controller
     }
 
     /**
-     * Eliminar docente
+     * Elimina un docente sin cargas horarias asignadas.
+     * Corresponde al flujo EliminarDocente() del CU14.
      */
     public function destroy($id)
     {
@@ -147,6 +160,7 @@ class DocenteController extends Controller
                     ->with('error', 'No se puede eliminar el docente porque tiene cargas horarias asignadas');
             }
 
+            // Registra en bitacora la eliminacion de un docente, correspondiente al CU14.
             $this->registrarBitacora(
                 'ELIMINAR',
                 'Docente ' . $nombreDocente . ' eliminado del sistema'
@@ -163,7 +177,8 @@ class DocenteController extends Controller
     }
 
     /**
-     * Cambiar estado de contratacion del docente
+     * Cambia el estado de contratacion del docente.
+     * Corresponde al flujo CambiarEstadoDocente() del CU14.
      */
     public function cambiarEstado(Request $request, $id)
     {
@@ -177,6 +192,7 @@ class DocenteController extends Controller
             $estadoAnterior = $docente->estado_contratacion;
             $docente->update(['estado_contratacion' => $validado['estado_contratacion']]);
 
+            // Registra en bitacora el cambio de estado docente, correspondiente al CU14.
             $this->registrarBitacora(
                 'CAMBIAR ESTADO',
                 'Docente ' . $docente->nombres . ' cambio estado: ' . $estadoAnterior . ' -> ' . $validado['estado_contratacion']
@@ -191,7 +207,8 @@ class DocenteController extends Controller
     }
 
     /**
-     * Filtrar docentes por estado de contratacion
+     * Filtra docentes por estado, formacion y texto de busqueda.
+     * Corresponde al flujo FiltrarDocentes() del CU14.
      */
     public function filtrar(Request $request)
     {

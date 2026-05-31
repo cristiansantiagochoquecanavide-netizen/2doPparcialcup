@@ -1,4 +1,5 @@
 @extends('layouts.app')
+<!-- Vista de CU1: Dashboard. Muestra accesos a los modulos despues de iniciar sesion. -->
 
 @section('titulo', 'Dashboard')
 

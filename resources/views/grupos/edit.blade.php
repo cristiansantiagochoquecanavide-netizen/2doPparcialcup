@@ -1,4 +1,5 @@
 @extends('layouts.app')
+<!-- Vista de CU12: Gestionar grupos. Formulario para actualizar grupos. -->
 
 @section('titulo', 'Editar Grupo: ' . $grupo->codigo_grupo)
 

@@ -9,10 +9,15 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Auth;
 
+/**
+ * Controlador del CU3: Gestionar usuarios.
+ * Permite listar, registrar, modificar, consultar y eliminar usuarios del sistema.
+ */
 class UsuarioController extends Controller
 {
     /**
-     * Listar todos los usuarios
+     * Muestra el listado de usuarios registrados.
+     * Corresponde al flujo ListarUsuarios() del CU3.
      */
     public function index()
     {
@@ -29,7 +34,8 @@ class UsuarioController extends Controller
     }
 
     /**
-     * Mostrar formulario para crear usuario
+     * Muestra el formulario de registro de usuario.
+     * Corresponde al flujo CrearUsuario() del CU3.
      */
     public function create()
     {
@@ -46,7 +52,8 @@ class UsuarioController extends Controller
     }
 
     /**
-     * Guardar nuevo usuario
+     * Registra un nuevo usuario con rol y credenciales.
+     * Corresponde al flujo GuardarUsuario() del CU3.
      */
     public function store(Request $request)
     {
@@ -67,7 +74,7 @@ class UsuarioController extends Controller
                 'estado' => $validado['estado']
             ]);
 
-            // Registrar en bitácora
+            // Registra en bitacora la creacion de un usuario, correspondiente al CU3.
             Bitacora::create([
                 'id_usuario' => Auth::id(),
                 'modulo' => 'Gestión de Usuarios',
@@ -86,7 +93,8 @@ class UsuarioController extends Controller
     }
 
     /**
-     * Mostrar detalles de un usuario
+     * Muestra los datos detallados de un usuario.
+     * Corresponde al flujo ConsultarUsuario() del CU3.
      */
     public function show($id)
     {
@@ -103,7 +111,8 @@ class UsuarioController extends Controller
     }
 
     /**
-     * Mostrar formulario para editar usuario
+     * Muestra el formulario de edicion de usuario.
+     * Corresponde al flujo EditarUsuario() del CU3.
      */
     public function edit($id)
     {
@@ -122,7 +131,8 @@ class UsuarioController extends Controller
     }
 
     /**
-     * Actualizar usuario
+     * Actualiza datos, rol, estado y credenciales opcionales del usuario.
+     * Corresponde al flujo ActualizarUsuario() del CU3.
      */
     public function update(Request $request, $id)
     {
@@ -150,7 +160,7 @@ class UsuarioController extends Controller
 
             $usuario->update($datosActualizar);
 
-            // Registrar en bitácora
+            // Registra en bitacora la actualizacion de un usuario, correspondiente al CU3.
             Bitacora::create([
                 'id_usuario' => Auth::id(),
                 'modulo' => 'Gestión de Usuarios',
@@ -169,7 +179,8 @@ class UsuarioController extends Controller
     }
 
     /**
-     * Eliminar usuario
+     * Elimina un usuario registrado del sistema.
+     * Corresponde al flujo EliminarUsuario() del CU3.
      */
     public function destroy($id)
     {
@@ -177,7 +188,7 @@ class UsuarioController extends Controller
             $usuario = Usuario::findOrFail($id);
             $nombreUsuario = $usuario->nombre_usuario;
 
-            // Registrar en bitácora antes de eliminar
+            // Registra en bitacora la eliminacion de un usuario, correspondiente al CU3.
             Bitacora::create([
                 'id_usuario' => Auth::id(),
                 'modulo' => 'Gestión de Usuarios',

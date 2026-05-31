@@ -5,6 +5,10 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 
+/**
+ * Modelo Requisito.
+ * Representa la tabla requisitos y participa en CU7.
+ */
 class Requisito extends Model
 {
     use HasFactory;
@@ -25,7 +29,7 @@ class Requisito extends Model
         'estado' => 'string'
     ];
 
-    // Relaciones
+    // Un requisito puede estar asociado a varios postulantes validados.
     public function postulantes()
     {
         return $this->belongsToMany(Postulante::class, 'postulante_requisito', 'id_requisito', 'id_postulante')

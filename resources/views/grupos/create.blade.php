@@ -1,4 +1,5 @@
 @extends('layouts.app')
+<!-- Vista de CU12: Gestionar grupos. Formulario para registrar grupos. -->
 
 @section('titulo', 'Crear Grupo')
 

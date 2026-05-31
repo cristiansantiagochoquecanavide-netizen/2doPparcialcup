@@ -1,4 +1,5 @@
 @extends('layouts.app')
+<!-- Vista de CU6: Gestionar postulantes. Muestra tabla y acciones del CRUD de postulantes. -->
 
 @section('titulo', 'Gestión de Postulantes')
 

@@ -8,10 +8,15 @@ use App\Models\Bitacora;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
+/**
+ * Controlador del CU4: Gestionar roles y asignar permisos.
+ * Administra roles, sus permisos asociados y restricciones de eliminacion.
+ */
 class RolController extends Controller
 {
     /**
-     * Listar todos los roles
+     * Muestra el listado de roles registrados.
+     * Corresponde al flujo ListarRoles() del CU4.
      */
     public function index()
     {
@@ -28,7 +33,8 @@ class RolController extends Controller
     }
 
     /**
-     * Mostrar formulario para crear rol
+     * Muestra el formulario para registrar un rol.
+     * Corresponde al flujo CrearRol() del CU4.
      */
     public function create()
     {
@@ -41,7 +47,8 @@ class RolController extends Controller
     }
 
     /**
-     * Guardar nuevo rol
+     * Registra un nuevo rol del sistema.
+     * Corresponde al flujo GuardarRol() del CU4.
      */
     public function store(Request $request)
     {
@@ -54,7 +61,7 @@ class RolController extends Controller
 
             $rol = Rol::create($validado);
 
-            // Registrar en bitácora
+            // Registra en bitacora la creacion de un rol, correspondiente al CU4.
             Bitacora::create([
                 'id_usuario' => Auth::id(),
                 'modulo' => 'Gestión de Roles',
@@ -73,7 +80,8 @@ class RolController extends Controller
     }
 
     /**
-     * Mostrar detalles de un rol
+     * Muestra datos, permisos y usuarios asociados a un rol.
+     * Corresponde al flujo ConsultarRol() del CU4.
      */
     public function show($id)
     {
@@ -90,7 +98,8 @@ class RolController extends Controller
     }
 
     /**
-     * Mostrar formulario para editar rol
+     * Muestra el formulario de edicion de rol.
+     * Corresponde al flujo EditarRol() del CU4.
      */
     public function edit($id)
     {
@@ -107,7 +116,8 @@ class RolController extends Controller
     }
 
     /**
-     * Actualizar rol
+     * Actualiza nombre, descripcion y estado de un rol.
+     * Corresponde al flujo ActualizarRol() del CU4.
      */
     public function update(Request $request, $id)
     {
@@ -122,7 +132,7 @@ class RolController extends Controller
 
             $rol->update($validado);
 
-            // Registrar en bitácora
+            // Registra en bitacora la actualizacion de un rol, correspondiente al CU4.
             Bitacora::create([
                 'id_usuario' => Auth::id(),
                 'modulo' => 'Gestión de Roles',
@@ -141,7 +151,8 @@ class RolController extends Controller
     }
 
     /**
-     * Eliminar rol
+     * Elimina un rol sin usuarios asociados.
+     * Corresponde al flujo EliminarRol() del CU4.
      */
     public function destroy($id)
     {
@@ -155,7 +166,7 @@ class RolController extends Controller
                     ->with('error', 'No se puede eliminar el rol porque tiene usuarios asociados');
             }
 
-            // Registrar en bitácora antes de eliminar
+            // Registra en bitacora la eliminacion de un rol, correspondiente al CU4.
             Bitacora::create([
                 'id_usuario' => Auth::id(),
                 'modulo' => 'Gestión de Roles',
@@ -175,7 +186,8 @@ class RolController extends Controller
     }
 
     /**
-     * Mostrar formulario para asignar permisos a un rol
+     * Muestra los permisos disponibles para asignarlos al rol.
+     * Corresponde al flujo AsignarPermisos() del CU4.
      */
     public function asignarPermisos($id)
     {
@@ -196,7 +208,8 @@ class RolController extends Controller
     }
 
     /**
-     * Guardar permisos asignados a un rol
+     * Sincroniza los permisos asignados a un rol.
+     * Corresponde al flujo GuardarPermisos() del CU4.
      */
     public function guardarPermisos(Request $request, $id)
     {
@@ -211,7 +224,7 @@ class RolController extends Controller
             // Sincronizar permisos (detach y attach)
             $rol->permisos()->sync($validado['permisos'] ?? []);
 
-            // Registrar en bitácora
+            // Registra en bitacora la asignacion de permisos, correspondiente al CU4.
             $cantidadPermisos = count($validado['permisos'] ?? []);
             Bitacora::create([
                 'id_usuario' => Auth::id(),

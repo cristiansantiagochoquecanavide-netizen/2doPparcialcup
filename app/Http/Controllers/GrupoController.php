@@ -9,10 +9,15 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Validation\Rule;
 
+/**
+ * Controlador del CU12: Gestionar grupos.
+ * Permite registrar, consultar, actualizar, eliminar y calcular grupos academicos.
+ */
 class GrupoController extends Controller
 {
     /**
-     * Listar todos los grupos
+     * Muestra el listado de grupos registrados.
+     * Corresponde al flujo ListarGrupos() del CU12.
      */
     public function index()
     {
@@ -31,7 +36,8 @@ class GrupoController extends Controller
     }
 
     /**
-     * Mostrar formulario para crear grupo
+     * Muestra el formulario de registro de grupo.
+     * Corresponde al flujo CrearGrupo() del CU12.
      */
     public function create()
     {
@@ -44,7 +50,8 @@ class GrupoController extends Controller
     }
 
     /**
-     * Guardar nuevo grupo
+     * Registra un nuevo grupo asociado a una gestion activa.
+     * Corresponde al flujo GuardarGrupo() del CU12.
      */
     public function store(Request $request)
     {
@@ -53,6 +60,7 @@ class GrupoController extends Controller
             $validado['id_gestion'] = $this->gestionActiva()->id_gestion;
             $grupo = Grupo::create($validado);
 
+            // Registra en bitacora la creacion de un grupo, correspondiente al CU12.
             $this->registrarBitacora(
                 'CREAR',
                 'Grupo ' . $grupo->codigo_grupo . ' creado exitosamente'
@@ -68,7 +76,8 @@ class GrupoController extends Controller
     }
 
     /**
-     * Mostrar detalles de un grupo
+     * Muestra datos, ocupacion y estudiantes asignados al grupo.
+     * Corresponde al flujo ConsultarGrupo() del CU12.
      */
     public function show($id)
     {
@@ -95,7 +104,8 @@ class GrupoController extends Controller
     }
 
     /**
-     * Mostrar formulario para editar grupo
+     * Muestra el formulario de edicion de grupo.
+     * Corresponde al flujo EditarGrupo() del CU12.
      */
     public function edit($id)
     {
@@ -112,7 +122,8 @@ class GrupoController extends Controller
     }
 
     /**
-     * Actualizar grupo
+     * Actualiza codigo, cupo maximo y estado del grupo.
+     * Corresponde al flujo ActualizarGrupo() del CU12.
      */
     public function update(Request $request, $id)
     {
@@ -130,6 +141,7 @@ class GrupoController extends Controller
 
             $grupo->update($validado);
 
+            // Registra en bitacora la actualizacion de un grupo, correspondiente al CU12.
             $this->registrarBitacora(
                 'ACTUALIZAR',
                 'Grupo ' . $grupo->codigo_grupo . ' actualizado'
@@ -145,7 +157,8 @@ class GrupoController extends Controller
     }
 
     /**
-     * Eliminar grupo
+     * Elimina un grupo sin estudiantes ni cargas horarias asociadas.
+     * Corresponde al flujo EliminarGrupo() del CU12.
      */
     public function destroy($id)
     {
@@ -163,6 +176,7 @@ class GrupoController extends Controller
                     ->with('error', 'No se puede eliminar el grupo porque tiene cargas horarias asignadas');
             }
 
+            // Registra en bitacora la eliminacion de un grupo, correspondiente al CU12.
             $this->registrarBitacora(
                 'ELIMINAR',
                 'Grupo ' . $codigoGrupo . ' eliminado del sistema'
@@ -179,7 +193,8 @@ class GrupoController extends Controller
     }
 
     /**
-     * Mostrar calculadora de grupos
+     * Muestra la calculadora de distribucion de grupos.
+     * Corresponde al flujo CalcularGrupos() del CU12.
      */
     public function calculadora()
     {
@@ -194,7 +209,8 @@ class GrupoController extends Controller
     }
 
     /**
-     * Calcular la cantidad de grupos necesarios para una gestion.
+     * Calcula cantidad de grupos y distribucion estimada de postulantes.
+     * Corresponde al flujo CalcularGrupos() del CU12.
      */
     public function calcularCantidadGrupos(Request $request)
     {

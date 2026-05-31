@@ -1,4 +1,5 @@
 @extends('layouts.app')
+<!-- Vista de CU14: Gestionar docentes. Permite filtrar docentes por criterios. -->
 
 @section('titulo', 'Filtrar Docentes')
 

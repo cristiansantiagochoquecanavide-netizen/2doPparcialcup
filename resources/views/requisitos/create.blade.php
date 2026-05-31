@@ -1,4 +1,5 @@
 @extends('layouts.app')
+<!-- Vista de CU7: Validar requisitos. Formulario para registrar requisitos. -->
 
 @section('titulo', 'Crear Requisito')
 

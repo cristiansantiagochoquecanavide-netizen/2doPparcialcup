@@ -9,10 +9,15 @@ use App\Models\Bitacora;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
+/**
+ * Controlador del CU6: Gestionar postulantes.
+ * Permite registrar, consultar, actualizar, eliminar y cambiar estado de postulantes.
+ */
 class PostulanteController extends Controller
 {
     /**
-     * Listar todos los postulantes
+     * Muestra el listado de postulantes registrados.
+     * Corresponde al flujo ListarPostulantes() del CU6.
      */
     public function index()
     {
@@ -30,7 +35,8 @@ class PostulanteController extends Controller
     }
 
     /**
-     * Mostrar formulario para crear postulante
+     * Muestra el formulario de registro de postulante.
+     * Corresponde al flujo CrearPostulante() del CU6.
      */
     public function create()
     {
@@ -47,7 +53,8 @@ class PostulanteController extends Controller
     }
 
     /**
-     * Guardar nuevo postulante
+     * Registra un nuevo postulante con sus opciones de carrera.
+     * Corresponde al flujo GuardarPostulante() del CU6.
      */
     public function store(Request $request)
     {
@@ -72,7 +79,7 @@ class PostulanteController extends Controller
 
             $postulante = Postulante::create($validado);
 
-            // Registrar en bitácora
+            // Registra en bitacora la creacion de un postulante, correspondiente al CU6.
             Bitacora::create([
                 'id_usuario' => Auth::id(),
                 'modulo' => 'Gestión de Postulantes',
@@ -91,7 +98,8 @@ class PostulanteController extends Controller
     }
 
     /**
-     * Mostrar detalles de un postulante
+     * Muestra datos, requisitos, pagos e inscripciones del postulante.
+     * Corresponde al flujo ConsultarPostulante() del CU6.
      */
     public function show($id)
     {
@@ -114,7 +122,8 @@ class PostulanteController extends Controller
     }
 
     /**
-     * Mostrar formulario para editar postulante
+     * Muestra el formulario de edicion del postulante.
+     * Corresponde al flujo EditarPostulante() del CU6.
      */
     public function edit($id)
     {
@@ -133,7 +142,8 @@ class PostulanteController extends Controller
     }
 
     /**
-     * Actualizar postulante
+     * Actualiza los datos personales y academicos del postulante.
+     * Corresponde al flujo ActualizarPostulante() del CU6.
      */
     public function update(Request $request, $id)
     {
@@ -160,7 +170,7 @@ class PostulanteController extends Controller
 
             $postulante->update($validado);
 
-            // Registrar en bitácora
+            // Registra en bitacora la actualizacion de un postulante, correspondiente al CU6.
             Bitacora::create([
                 'id_usuario' => Auth::id(),
                 'modulo' => 'Gestión de Postulantes',
@@ -179,7 +189,8 @@ class PostulanteController extends Controller
     }
 
     /**
-     * Eliminar postulante
+     * Elimina un postulante sin inscripciones asociadas.
+     * Corresponde al flujo EliminarPostulante() del CU6.
      */
     public function destroy($id)
     {
@@ -193,7 +204,7 @@ class PostulanteController extends Controller
                     ->with('error', 'No se puede eliminar el postulante porque tiene inscripciones');
             }
 
-            // Registrar en bitácora antes de eliminar
+            // Registra en bitacora la eliminacion de un postulante, correspondiente al CU6.
             Bitacora::create([
                 'id_usuario' => Auth::id(),
                 'modulo' => 'Gestión de Postulantes',
@@ -213,7 +224,8 @@ class PostulanteController extends Controller
     }
 
     /**
-     * Cambiar estado del postulante
+     * Cambia el estado administrativo del postulante.
+     * Corresponde al flujo CambiarEstadoPostulante() del CU6.
      */
     public function cambiarEstado(Request $request, $id)
     {
@@ -227,7 +239,7 @@ class PostulanteController extends Controller
             $estadoAnterior = $postulante->estado;
             $postulante->update(['estado' => $validado['estado']]);
 
-            // Registrar en bitácora
+            // Registra en bitacora el cambio de estado del postulante, correspondiente al CU6.
             Bitacora::create([
                 'id_usuario' => Auth::id(),
                 'modulo' => 'Gestión de Postulantes',

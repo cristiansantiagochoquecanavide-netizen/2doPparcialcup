@@ -1,4 +1,5 @@
 @extends('layouts.app')
+<!-- Vista de CU14: Gestionar docentes. Formulario para registrar docentes. -->
 
 @section('titulo', 'Crear Docente')
 

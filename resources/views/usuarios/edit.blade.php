@@ -1,4 +1,5 @@
 @extends('layouts.app')
+<!-- Vista de CU3: Gestionar usuarios. Formulario para actualizar usuarios. -->
 
 @section('titulo', 'Editar Usuario: ' . $usuario->nombre_usuario)
 

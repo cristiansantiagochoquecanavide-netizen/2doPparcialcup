@@ -1,3 +1,4 @@
+<!-- Seccion de formulario reutilizable para crear y editar grupos del CU12. -->
 <div class="mb-3">
     <label for="codigo_grupo" class="form-label">
         <i class="bi bi-code"></i> Codigo del grupo

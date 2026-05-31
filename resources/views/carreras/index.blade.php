@@ -1,4 +1,5 @@
 @extends('layouts.app')
+<!-- Vista de CU10: Gestionar carreras. Muestra tabla y acciones del CRUD de carreras. -->
 
 @section('titulo', 'Gestión de Carreras')
 

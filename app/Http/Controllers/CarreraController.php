@@ -9,10 +9,15 @@ use App\Models\Bitacora;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
+/**
+ * Controlador del CU10: Gestionar carreras.
+ * Permite administrar carreras y configurar cupos por gestion academica.
+ */
 class CarreraController extends Controller
 {
     /**
-     * Listar todas las carreras
+     * Muestra el listado de carreras registradas.
+     * Corresponde al flujo ListarCarreras() del CU10.
      */
     public function index()
     {
@@ -30,7 +35,8 @@ class CarreraController extends Controller
     }
 
     /**
-     * Mostrar formulario para crear carrera
+     * Muestra el formulario de registro de carrera.
+     * Corresponde al flujo CrearCarrera() del CU10.
      */
     public function create()
     {
@@ -43,7 +49,8 @@ class CarreraController extends Controller
     }
 
     /**
-     * Guardar nueva carrera
+     * Registra una nueva carrera.
+     * Corresponde al flujo GuardarCarrera() del CU10.
      */
     public function store(Request $request)
     {
@@ -56,7 +63,7 @@ class CarreraController extends Controller
 
             $carrera = Carrera::create($validado);
 
-            // Registrar en bitácora
+            // Registra en bitacora la creacion de una carrera, correspondiente al CU10.
             Bitacora::create([
                 'id_usuario' => Auth::id(),
                 'modulo' => 'Gestión de Carreras',
@@ -75,7 +82,8 @@ class CarreraController extends Controller
     }
 
     /**
-     * Mostrar detalles de una carrera
+     * Muestra estadisticas y cupos asociados a una carrera.
+     * Corresponde al flujo ConsultarCarrera() del CU10.
      */
     public function show($id)
     {
@@ -103,7 +111,8 @@ class CarreraController extends Controller
     }
 
     /**
-     * Mostrar formulario para editar carrera
+     * Muestra el formulario de edicion de carrera.
+     * Corresponde al flujo EditarCarrera() del CU10.
      */
     public function edit($id)
     {
@@ -120,7 +129,8 @@ class CarreraController extends Controller
     }
 
     /**
-     * Actualizar carrera
+     * Actualiza codigo, nombre y estado de una carrera.
+     * Corresponde al flujo ActualizarCarrera() del CU10.
      */
     public function update(Request $request, $id)
     {
@@ -135,7 +145,7 @@ class CarreraController extends Controller
 
             $carrera->update($validado);
 
-            // Registrar en bitácora
+            // Registra en bitacora la actualizacion de una carrera, correspondiente al CU10.
             Bitacora::create([
                 'id_usuario' => Auth::id(),
                 'modulo' => 'Gestión de Carreras',
@@ -154,7 +164,8 @@ class CarreraController extends Controller
     }
 
     /**
-     * Eliminar carrera
+     * Elimina una carrera sin postulantes asociados.
+     * Corresponde al flujo EliminarCarrera() del CU10.
      */
     public function destroy($id)
     {
@@ -169,7 +180,7 @@ class CarreraController extends Controller
                     ->with('error', 'No se puede eliminar la carrera porque tiene postulantes asociados');
             }
 
-            // Registrar en bitácora antes de eliminar
+            // Registra en bitacora la eliminacion de una carrera, correspondiente al CU10.
             Bitacora::create([
                 'id_usuario' => Auth::id(),
                 'modulo' => 'Gestión de Carreras',
@@ -189,7 +200,8 @@ class CarreraController extends Controller
     }
 
     /**
-     * Asignar cupos a una carrera en una gestión específica
+     * Muestra el formulario para asignar cupos por gestion academica.
+     * Corresponde al flujo AsignarCupoCarrera() del CU10.
      */
     public function asignarCupo($id)
     {
@@ -210,7 +222,8 @@ class CarreraController extends Controller
     }
 
     /**
-     * Guardar cupo asignado a una carrera
+     * Guarda o actualiza el cupo de una carrera por gestion.
+     * Corresponde al flujo GuardarCupoCarrera() del CU10.
      */
     public function guardarCupo(Request $request, $id)
     {
@@ -239,7 +252,7 @@ class CarreraController extends Controller
                 $accion = 'ASIGNAR CUPO';
             }
 
-            // Registrar en bitácora
+            // Registra en bitacora la asignacion o actualizacion de cupo, correspondiente al CU10.
             Bitacora::create([
                 'id_usuario' => Auth::id(),
                 'modulo' => 'Gestión de Carreras',

@@ -5,6 +5,10 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 
+/**
+ * Modelo Permiso.
+ * Representa la tabla permisos y participa en CU4.
+ */
 class Permiso extends Model
 {
     use HasFactory;
@@ -18,7 +22,7 @@ class Permiso extends Model
         'descripcion'
     ];
 
-    // Relaciones
+    // Un permiso puede estar asociado a varios roles.
     public function roles()
     {
         return $this->belongsToMany(Rol::class, 'rol_permiso', 'id_permiso', 'id_rol');

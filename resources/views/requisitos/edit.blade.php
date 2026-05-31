@@ -1,4 +1,5 @@
 @extends('layouts.app')
+<!-- Vista de CU7: Validar requisitos. Formulario para actualizar requisitos. -->
 
 @section('titulo', 'Editar Requisito: ' . $requisito->nombre)
 

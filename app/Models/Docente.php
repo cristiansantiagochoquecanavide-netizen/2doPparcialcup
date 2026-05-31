@@ -5,6 +5,10 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 
+/**
+ * Modelo Docente.
+ * Representa la tabla docentes y participa en CU14.
+ */
 class Docente extends Model
 {
     use HasFactory;
@@ -33,7 +37,7 @@ class Docente extends Model
         'estado_contratacion' => 'string'
     ];
 
-    // Relaciones
+    // Un docente puede tener varias cargas horarias asignadas.
     public function cargasHorarias()
     {
         return $this->hasMany(CargaHoraria::class, 'id_docente');

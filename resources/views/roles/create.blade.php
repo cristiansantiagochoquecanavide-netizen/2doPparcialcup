@@ -1,4 +1,5 @@
 @extends('layouts.app')
+<!-- Vista de CU4: Gestionar roles. Formulario para registrar roles. -->
 
 @section('titulo', 'Crear Rol')
 

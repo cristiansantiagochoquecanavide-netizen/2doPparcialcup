@@ -1,4 +1,5 @@
 @extends('layouts.app')
+<!-- Vista de CU12: Gestionar grupos. Consulta de detalle, ocupacion y estudiantes. -->
 
 @section('titulo', 'Ver Grupo: ' . $grupo->codigo_grupo)
 

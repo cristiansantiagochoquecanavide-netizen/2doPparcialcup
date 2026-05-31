@@ -1,4 +1,5 @@
 @extends('layouts.app')
+<!-- Vista de CU10: Gestionar carreras. Formulario para registrar carreras. -->
 
 @section('titulo', 'Crear Carrera')
 

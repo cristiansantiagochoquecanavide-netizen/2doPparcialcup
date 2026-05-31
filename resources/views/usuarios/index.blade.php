@@ -1,4 +1,5 @@
 @extends('layouts.app')
+<!-- Vista de CU3: Gestionar usuarios. Muestra tabla y acciones del CRUD de usuarios. -->
 
 @section('titulo', 'Gestión de Usuarios')
 

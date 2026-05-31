@@ -1,4 +1,5 @@
 @extends('layouts.app')
+<!-- Vista de CU10: Gestionar carreras. Formulario para asignar cupos por gestion. -->
 
 @section('titulo', 'Asignar Cupo: ' . $carrera->nombre)
 

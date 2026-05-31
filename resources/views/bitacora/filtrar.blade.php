@@ -1,4 +1,5 @@
 @extends('layouts.app')
+<!-- Vista de CU5: Ver bitacora. Permite filtrar acciones auditadas. -->
 
 @section('titulo', 'Filtrar Bitácora')
 

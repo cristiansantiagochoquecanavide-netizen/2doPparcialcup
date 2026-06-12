@@ -18,10 +18,15 @@ class CargaHoraria extends Model
     public $timestamps = false;
 
     protected $fillable = [
+        // Se asigna horario a un grupo habilitado.
         'id_grupo',
+        // Materia del CUP: Computacion, Matematicas, Ingles o Fisica.
         'id_materia',
+        // El docente debe tener carga horaria asignada para registrar clases, asistencia y notas.
         'id_docente',
+        // Aula donde se dicta la materia.
         'id_aula',
+        // CU17: dia y horas forman el bloque usado para detectar cruces de aula y docente.
         'dia_semana',
         'hora_inicio',
         'hora_fin'
@@ -47,12 +52,14 @@ class CargaHoraria extends Model
     // Cada carga horaria pertenece a un docente.
     public function docente()
     {
+        // CU17: el controlador debe controlar que el docente tenga entre 1 y 4 grupos asignados.
         return $this->belongsTo(Docente::class, 'id_docente');
     }
 
     // Cada carga horaria se dicta en un aula.
     public function aula()
     {
+        // CU17: antes de guardar debe validarse que el aula no tenga cruce en el mismo dia y rango horario.
         return $this->belongsTo(Aula::class, 'id_aula');
     }
 

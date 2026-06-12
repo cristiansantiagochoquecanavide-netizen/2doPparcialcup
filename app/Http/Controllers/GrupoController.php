@@ -23,6 +23,7 @@ class GrupoController extends Controller
     public function index()
     {
         try {
+            // CU12/CU13: muestra total de estudiantes asignados para controlar ocupacion por grupo.
             $grupos = Grupo::with('gestion')
                 ->withCount('estudiantesGrupo')
                 ->paginate(15);
@@ -86,6 +87,7 @@ class GrupoController extends Controller
             $grupo = Grupo::with('gestion', 'estudiantesGrupo.inscripcion.postulante', 'cargasHorarias')
                 ->findOrFail($id);
 
+            // CU13: calcula ocupacion, disponibles y porcentaje para mostrar estudiantes por grupo.
             $estudiantes = $grupo->estudiantesGrupo->count();
             $ocupacion = [
                 'estudiantes' => $estudiantes,
@@ -222,12 +224,14 @@ class GrupoController extends Controller
             $validado = $request->validate([
                 'id_gestion' => 'required|exists:gestion_academica,id_gestion',
                 'cantidad_postulantes' => 'required|integer|min:1',
+                // Regla principal del enunciado: cada grupo admite maximo 70 estudiantes.
                 'cupo_maximo_grupo' => 'required|integer|min:1|max:70'
             ]);
 
             $gestion = GestionAcademica::findOrFail($validado['id_gestion']);
             $cantidadPostulantes = $validado['cantidad_postulantes'];
             $cupoMaximo = $validado['cupo_maximo_grupo'];
+            // CU12: calcula automaticamente cantidad total de grupos habilitados segun inscritos/cupo.
             $gruposNecesarios = (int) ceil($cantidadPostulantes / $cupoMaximo);
             $distribucion = [];
             $postulantesRestantes = $cantidadPostulantes;
@@ -271,6 +275,7 @@ class GrupoController extends Controller
                     ->where(fn ($query) => $query->where('id_gestion', $idGestion))
                     ->ignore($grupo?->id_grupo, 'id_grupo'),
             ],
+            // Regla principal: ningun grupo puede superar 70 estudiantes.
             'cupo_maximo' => 'required|integer|min:1|max:70',
             'estado' => 'required|in:ACTIVO,INACTIVO'
         ];

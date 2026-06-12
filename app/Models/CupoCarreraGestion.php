@@ -18,8 +18,11 @@ class CupoCarreraGestion extends Model
     public $timestamps = false;
 
     protected $fillable = [
+        // CU11: carrera existente a la que se asigna cupo.
         'id_carrera',
+        // CU11: gestion academica existente.
         'id_gestion',
+        // CU11: cupo maximo por carrera y gestion; debe validarse como no negativo.
         'cupo_maximo'
     ];
 

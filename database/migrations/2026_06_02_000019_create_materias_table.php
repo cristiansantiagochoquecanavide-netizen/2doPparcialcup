@@ -13,6 +13,7 @@ return new class extends Migration
     {
         Schema::create('materias', function (Blueprint $table) {
             $table->bigIncrements('id_materia');
+            // CU15: nombre obligatorio y unico para evitar materias duplicadas.
             $table->string('nombre', 100)->unique();
             $table->string('descripcion', 200)->nullable();
             $table->string('estado', 20)->default('ACTIVA');

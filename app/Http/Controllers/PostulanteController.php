@@ -8,6 +8,7 @@ use App\Models\Requisito;
 use App\Models\Bitacora;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Validation\Rule;
 
 /**
  * Controlador del CU6: Gestionar postulantes.
@@ -22,11 +23,31 @@ class PostulanteController extends Controller
     public function index()
     {
         try {
+            // Captura el texto de busqueda enviado desde postulantes/index.blade.php.
+            $buscar = request('buscar');
+
             $postulantes = Postulante::with('carreraOpcionPrimera', 'carreraOpcionSegunda')
+                // Filtra por CI, nombres, apellidos o nombre de carrera cuando el usuario escribe en el buscador.
+                ->when($buscar, function ($query, $buscar) {
+                    $query->where(function ($query) use ($buscar) {
+                        $query->where('ci', 'like', "%{$buscar}%")
+                            ->orWhere('nombres', 'like', "%{$buscar}%")
+                            ->orWhere('apellidos', 'like', "%{$buscar}%")
+                            ->orWhereHas('carreraOpcionPrimera', function ($query) use ($buscar) {
+                                $query->where('nombre', 'like', "%{$buscar}%");
+                            })
+                            ->orWhereHas('carreraOpcionSegunda', function ($query) use ($buscar) {
+                                $query->where('nombre', 'like', "%{$buscar}%");
+                            });
+                    });
+                })
+                ->orderBy('apellidos')
+                ->orderBy('nombres')
                 ->paginate(15);
             
             return view('postulantes.index', [
-                'postulantes' => $postulantes
+                'postulantes' => $postulantes,
+                'buscar' => $buscar
             ]);
         } catch (\Exception $e) {
             return redirect()->back()
@@ -53,30 +74,47 @@ class PostulanteController extends Controller
     }
 
     /**
+     * CU25: muestra el formulario publico de pre-registro del postulante.
+     */
+    public function preRegistro()
+    {
+        $carreras = Carrera::where('estado', 'ACTIVA')
+            ->orderBy('nombre')
+            ->get();
+
+        return view('postulantes.pre-registro', [
+            'carreras' => $carreras
+        ]);
+    }
+
+    /**
+     * CU25: guarda el pre-registro publico y deja al postulante pendiente de validacion.
+     */
+    public function guardarPreRegistro(Request $request)
+    {
+        $request->merge(['estado' => 'PENDIENTE_VALIDACION']);
+
+        $validado = $request->validate($this->reglasValidacion());
+
+        // CU25: el postulante no queda validado automaticamente; el administrador revisa requisitos despues.
+        $validado['estado'] = 'PENDIENTE_VALIDACION';
+
+        Postulante::create($validado);
+
+        return redirect()->route('postulantes.pre-registro')
+            ->with('success', 'Pre-registro enviado correctamente. Sus requisitos seran revisados por administracion.');
+    }
+
+    /**
      * Registra un nuevo postulante con sus opciones de carrera.
      * Corresponde al flujo GuardarPostulante() del CU6.
      */
     public function store(Request $request)
     {
-        try {
-            $validado = $request->validate([
-                'ci' => 'required|string|unique:postulantes,ci|max:20',
-                'nombres' => 'required|string|max:80',
-                'apellidos' => 'required|string|max:80',
-                'fecha_nacimiento' => 'required|date|before:today',
-                'sexo' => 'required|in:M,F',
-                'direccion' => 'nullable|string|max:150',
-                'telefono' => 'nullable|string|max:20',
-                'correo' => 'nullable|email|unique:postulantes,correo|max:100',
-                'colegio_procedencia' => 'nullable|string|max:120',
-                'ciudad' => 'nullable|string|max:80',
-                'titulo_bachiller' => 'nullable|string|max:120',
-                'otros_requisitos' => 'nullable|string|max:255',
-                'id_carrera_primera_opcion' => 'required|exists:carreras,id_carrera',
-                'id_carrera_segunda_opcion' => 'nullable|exists:carreras,id_carrera',
-                'estado' => 'required|in:REGISTRADO,VALIDADO,INSCRITO,RECHAZADO'
-            ]);
+        // Valida todos los campos obligatorios antes de crear el postulante.
+        $validado = $request->validate($this->reglasValidacion());
 
+        try {
             $postulante = Postulante::create($validado);
 
             // Registra en bitacora la creacion de un postulante, correspondiente al CU6.
@@ -147,26 +185,11 @@ class PostulanteController extends Controller
      */
     public function update(Request $request, $id)
     {
+        // Reutiliza las mismas reglas, ignorando el CI/correo del postulante actual para permitir editarlo.
+        $validado = $request->validate($this->reglasValidacion($id));
+
         try {
             $postulante = Postulante::findOrFail($id);
-
-            $validado = $request->validate([
-                'ci' => 'required|string|unique:postulantes,ci,' . $id . ',id_postulante|max:20',
-                'nombres' => 'required|string|max:80',
-                'apellidos' => 'required|string|max:80',
-                'fecha_nacimiento' => 'required|date|before:today',
-                'sexo' => 'required|in:M,F',
-                'direccion' => 'nullable|string|max:150',
-                'telefono' => 'nullable|string|max:20',
-                'correo' => 'nullable|email|unique:postulantes,correo,' . $id . ',id_postulante|max:100',
-                'colegio_procedencia' => 'nullable|string|max:120',
-                'ciudad' => 'nullable|string|max:80',
-                'titulo_bachiller' => 'nullable|string|max:120',
-                'otros_requisitos' => 'nullable|string|max:255',
-                'id_carrera_primera_opcion' => 'required|exists:carreras,id_carrera',
-                'id_carrera_segunda_opcion' => 'nullable|exists:carreras,id_carrera',
-                'estado' => 'required|in:REGISTRADO,VALIDADO,INSCRITO,RECHAZADO'
-            ]);
 
             $postulante->update($validado);
 
@@ -233,7 +256,7 @@ class PostulanteController extends Controller
             $postulante = Postulante::findOrFail($id);
 
             $validado = $request->validate([
-                'estado' => 'required|in:REGISTRADO,VALIDADO,INSCRITO,RECHAZADO'
+                'estado' => 'required|in:PENDIENTE_VALIDACION,REGISTRADO,VALIDADO,INSCRITO,RECHAZADO'
             ]);
 
             $estadoAnterior = $postulante->estado;
@@ -254,5 +277,37 @@ class PostulanteController extends Controller
             return redirect()->back()
                 ->with('error', 'Error al cambiar estado: ' . $e->getMessage());
         }
+    }
+
+    private function reglasValidacion(?int $idPostulante = null): array
+    {
+        // Reglas comunes para crear y editar: impiden campos obligatorios vacios y duplicados.
+        return [
+            'ci' => [
+                'required',
+                'string',
+                'max:20',
+                Rule::unique('postulantes', 'ci')->ignore($idPostulante, 'id_postulante'),
+            ],
+            'nombres' => 'required|string|max:80',
+            'apellidos' => 'required|string|max:80',
+            'fecha_nacimiento' => 'required|date|before:today',
+            'sexo' => 'required|in:M,F',
+            'direccion' => 'nullable|string|max:150',
+            'telefono' => 'nullable|string|max:20',
+            'correo' => [
+                'required',
+                'email',
+                'max:100',
+                Rule::unique('postulantes', 'correo')->ignore($idPostulante, 'id_postulante'),
+            ],
+            'colegio_procedencia' => 'nullable|string|max:120',
+            'ciudad' => 'nullable|string|max:80',
+            'id_carrera_primera_opcion' => 'required|exists:carreras,id_carrera',
+            'id_carrera_segunda_opcion' => 'nullable|exists:carreras,id_carrera',
+            'titulo_bachiller' => 'nullable|string|max:120',
+            'otros_requisitos' => 'nullable|string|max:255',
+            'estado' => 'required|in:PENDIENTE_VALIDACION,REGISTRADO,VALIDADO,INSCRITO,RECHAZADO',
+        ];
     }
 }

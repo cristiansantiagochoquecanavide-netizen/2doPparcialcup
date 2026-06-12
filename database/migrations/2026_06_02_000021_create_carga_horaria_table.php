@@ -13,10 +13,12 @@ return new class extends Migration
     {
         Schema::create('carga_horaria', function (Blueprint $table) {
             $table->bigIncrements('id_carga_horaria');
+            // CU17: deben existir grupo, materia, docente y aula.
             $table->unsignedBigInteger('id_grupo');
             $table->unsignedBigInteger('id_materia');
             $table->unsignedBigInteger('id_docente');
             $table->unsignedBigInteger('id_aula');
+            // CU17: dia y rango horario usados para evitar cruces de aula y docente.
             $table->string('dia_semana', 15);
             $table->time('hora_inicio');
             $table->time('hora_fin');

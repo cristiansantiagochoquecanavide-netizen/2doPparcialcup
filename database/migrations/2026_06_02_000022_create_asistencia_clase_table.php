@@ -13,11 +13,15 @@ return new class extends Migration
     {
         Schema::create('asistencia_clase', function (Blueprint $table) {
             $table->bigIncrements('id_asistencia_clase');
+            // CU18: asistencia registrada segun carga horaria del docente.
             $table->unsignedBigInteger('id_carga_horaria');
+            // CU18: fecha de clase.
             $table->date('fecha_clase');
+            // CU18: tema avanzado en la clase.
             $table->string('tema_avanzado', 200)->nullable();
             $table->unsignedBigInteger('registrado_por');
             $table->timestamp('fecha_registro')->useCurrent();
+            // CU18: evita duplicar asistencia de la misma clase.
             $table->unique(['id_carga_horaria', 'fecha_clase']);
             $table->foreign('id_carga_horaria')->references('id_carga_horaria')->on('carga_horaria')->onDelete('cascade');
             $table->foreign('registrado_por')->references('id_usuario')->on('usuarios')->onDelete('restrict');

@@ -5,6 +5,10 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 
+/**
+ * Modelo AsistenciaDetalle.
+ * Guarda la asistencia individual de cada estudiante en una clase.
+ */
 class AsistenciaDetalle extends Model
 {
     use HasFactory;
@@ -15,7 +19,9 @@ class AsistenciaDetalle extends Model
 
     protected $fillable = [
         'id_asistencia_clase',
+        // CU18: estudiante inscrito que pertenece al grupo de la carga horaria.
         'id_inscripcion',
+        // CU18: estados esperados PRESENTE, AUSENTE, ATRASO o LICENCIA.
         'estado_asistencia',
         'observacion'
     ];
@@ -24,7 +30,7 @@ class AsistenciaDetalle extends Model
         'estado_asistencia' => 'string'
     ];
 
-    // Relaciones
+    // CU18: relaciona el detalle con la clase registrada.
     public function asistenciaClase()
     {
         return $this->belongsTo(AsistenciaClase::class, 'id_asistencia_clase');

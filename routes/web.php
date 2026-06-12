@@ -10,6 +10,7 @@ use App\Http\Controllers\RequisitoController;
 use App\Http\Controllers\CarreraController;
 use App\Http\Controllers\GrupoController;
 use App\Http\Controllers\DocenteController;
+use App\Http\Controllers\ReporteController;
 
 // CU1 y CU2: Autenticacion del usuario.
 // Rutas publicas para iniciar sesion y redirigir al formulario de acceso.
@@ -25,6 +26,10 @@ Route::get('/password/reset', [AuthController::class, 'showResetForm'])->name('p
 Route::post('/password/email', [AuthController::class, 'sendResetLink'])->name('password.email');
 Route::get('/password/reset/{token}', [AuthController::class, 'showNewPasswordForm'])->name('password.reset.form');
 Route::post('/password/reset/{token}', [AuthController::class, 'resetPassword'])->name('password.reset.post');
+
+// CU25: pre-registro publico de postulantes, disponible sin iniciar sesion.
+Route::get('/pre-registro', [PostulanteController::class, 'preRegistro'])->name('postulantes.pre-registro');
+Route::post('/pre-registro', [PostulanteController::class, 'guardarPreRegistro'])->name('postulantes.guardar-pre-registro');
 
 // Rutas protegidas por autenticacion.
 // Agrupa los casos de uso disponibles despues de iniciar sesion.
@@ -80,5 +85,8 @@ Route::middleware('auth')->group(function () {
     Route::resource('docentes', DocenteController::class);
     Route::post('/docentes/{id}/cambiar-estado', [DocenteController::class, 'cambiarEstado'])->name('docentes.cambiar-estado');
     Route::get('/docentes-filtrar', [DocenteController::class, 'filtrar'])->name('docentes.filtrar');
+
+    // CU23: reportes administrativos con filtros y registro en bitacora.
+    Route::get('/reportes', [ReporteController::class, 'index'])->name('reportes.index');
 
 });

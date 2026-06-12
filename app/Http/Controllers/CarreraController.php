@@ -228,14 +228,16 @@ class CarreraController extends Controller
     public function guardarCupo(Request $request, $id)
     {
         try {
+            // CU11: valida que la carrera exista antes de registrar el cupo por gestion.
             $carrera = Carrera::findOrFail($id);
 
+            // CU11: gestion existente y cupo no negativo; min:1 evita cupos vacios o negativos.
             $validado = $request->validate([
                 'id_gestion' => 'required|exists:gestion_academica,id_gestion',
                 'cupo_maximo' => 'required|integer|min:1|max:500'
             ]);
 
-            // Verificar si ya existe el cupo
+            // CU11: evita duplicidad de cupo para la misma carrera y gestion.
             $cupoExistente = CupoCarreraGestion::where('id_carrera', $id)
                 ->where('id_gestion', $validado['id_gestion'])
                 ->first();

@@ -62,6 +62,7 @@ CREATE TABLE usuarios (
     id_usuario BIGSERIAL PRIMARY KEY,
     id_rol BIGINT NOT NULL,
     nombre_usuario VARCHAR(50) NOT NULL UNIQUE,
+    -- Correo obligatorio y unico para coincidir con las validaciones de Laravel.
     correo VARCHAR(100) NOT NULL UNIQUE,
     password_hash VARCHAR(255) NOT NULL,
     estado VARCHAR(20) NOT NULL DEFAULT 'ACTIVO',
@@ -136,7 +137,7 @@ CREATE TABLE postulantes (
     sexo CHAR(1) NOT NULL,
     direccion VARCHAR(150),
     telefono VARCHAR(20),
-    correo VARCHAR(100) UNIQUE,
+    correo VARCHAR(100) NOT NULL UNIQUE,
     colegio_procedencia VARCHAR(120),
     ciudad VARCHAR(80),
     titulo_bachiller VARCHAR(120),
@@ -233,19 +234,24 @@ CREATE TABLE materias (
 
 CREATE TABLE aulas (
     id_aula BIGSERIAL PRIMARY KEY,
+    -- CU16: codigo unico para registrar, editar, buscar y listar aulas.
     codigo VARCHAR(20) NOT NULL UNIQUE,
     nombre VARCHAR(80) NOT NULL,
+    -- CU16: capacidad mayor a 0 validada por la aplicacion.
     capacidad INT NOT NULL,
     ubicacion VARCHAR(100),
+    -- CU16: estados esperados DISPONIBLE o NO DISPONIBLE.
     estado VARCHAR(20) NOT NULL DEFAULT 'DISPONIBLE'
 );
 
 CREATE TABLE carga_horaria (
     id_carga_horaria BIGSERIAL PRIMARY KEY,
+    -- CU17: grupo, materia, docente y aula deben existir.
     id_grupo BIGINT NOT NULL,
     id_materia BIGINT NOT NULL,
     id_docente BIGINT NOT NULL,
     id_aula BIGINT NOT NULL,
+    -- CU17: dia y rango horario permiten detectar cruces de aula y docente.
     dia_semana VARCHAR(15) NOT NULL,
     hora_inicio TIME NOT NULL,
     hora_fin TIME NOT NULL,
@@ -257,6 +263,7 @@ CREATE TABLE carga_horaria (
 
 CREATE TABLE asistencia_clase (
     id_asistencia_clase BIGSERIAL PRIMARY KEY,
+    -- CU18: asistencia registrada segun la carga horaria del docente.
     id_carga_horaria BIGINT NOT NULL,
     fecha_clase DATE NOT NULL,
     tema_avanzado VARCHAR(200),
@@ -270,7 +277,9 @@ CREATE TABLE asistencia_clase (
 CREATE TABLE asistencia_detalle (
     id_asistencia_detalle BIGSERIAL PRIMARY KEY,
     id_asistencia_clase BIGINT NOT NULL,
+    -- CU18: estudiante inscrito mostrado desde el grupo asignado.
     id_inscripcion BIGINT NOT NULL,
+    -- CU18: estados esperados PRESENTE, AUSENTE, ATRASO o LICENCIA.
     estado_asistencia VARCHAR(20) NOT NULL,
     observacion VARCHAR(255),
     FOREIGN KEY (id_asistencia_clase) REFERENCES asistencia_clase(id_asistencia_clase),
@@ -282,7 +291,9 @@ CREATE TABLE evaluacion_config (
     id_evaluacion BIGSERIAL PRIMARY KEY,
     id_gestion BIGINT NOT NULL,
     id_materia BIGINT NOT NULL,
+    -- CU19: permite 3 evaluaciones por materia y gestion.
     numero_evaluacion INT NOT NULL,
+    -- CU19: porcentaje valido para la evaluacion.
     porcentaje NUMERIC(5,2) NOT NULL,
     FOREIGN KEY (id_gestion) REFERENCES gestion_academica(id_gestion),
     FOREIGN KEY (id_materia) REFERENCES materias(id_materia),
@@ -291,8 +302,10 @@ CREATE TABLE evaluacion_config (
 
 CREATE TABLE notas (
     id_nota BIGSERIAL PRIMARY KEY,
+    -- CU20: inscripcion y evaluacion configurada existentes.
     id_inscripcion BIGINT NOT NULL,
     id_evaluacion BIGINT NOT NULL,
+    -- CU20: nota validada entre 0 y 100.
     nota NUMERIC(5,2) NOT NULL,
     fecha_registro TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
     FOREIGN KEY (id_inscripcion) REFERENCES inscripciones(id_inscripcion),
@@ -303,8 +316,10 @@ CREATE TABLE notas (
 CREATE TABLE resultado_admision (
     id_resultado BIGSERIAL PRIMARY KEY,
     id_inscripcion BIGINT NOT NULL UNIQUE,
+    -- CU21: promedio final general del postulante; >= 60 APROBADO, < 60 REPROBADO.
     promedio_final NUMERIC(5,2) NOT NULL,
     estado_resultado VARCHAR(20) NOT NULL,
+    -- CU22: carrera admitida por primera o segunda opcion; null si queda en espera por cupo.
     id_carrera_admitida BIGINT,
     orden_opcion_admitida INT,
     fecha_resultado TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,

@@ -194,6 +194,7 @@ class RequisitoController extends Controller
         try {
             $postulante = Postulante::findOrFail($id);
 
+            // CU7: aqui se valida que el postulante cumpla documentos como titulo de bachiller y otros requisitos.
             $validado = $request->validate([
                 'requisitos' => 'nullable|array',
                 'requisitos.*.id_requisito' => 'required|exists:requisitos,id_requisito',
@@ -214,6 +215,8 @@ class RequisitoController extends Controller
 
             $postulante->requisitos()->sync($datosSync);
 
+            // Si todos los requisitos obligatorios activos fueron presentados, el postulante queda VALIDADO.
+            // Ese estado es la condicion previa para registrar pago e inscripcion en los CU8 y CU9.
             $requisitosObligatorios = Requisito::where('estado', 'ACTIVO')
                 ->where('obligatorio', true)
                 ->pluck('id_requisito');

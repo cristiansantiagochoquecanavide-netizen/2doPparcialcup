@@ -15,7 +15,9 @@ return new class extends Migration
             $table->bigIncrements('id_cupo');
             $table->unsignedBigInteger('id_carrera');
             $table->unsignedBigInteger('id_gestion');
+            // CU11: cupo maximo por carrera y gestion; la validacion evita valores negativos.
             $table->integer('cupo_maximo');
+            // CU11: no puede existir mas de un cupo para la misma carrera en la misma gestion.
             $table->unique(['id_carrera', 'id_gestion']);
             $table->foreign('id_carrera')->references('id_carrera')->on('carreras')->onDelete('cascade');
             $table->foreign('id_gestion')->references('id_gestion')->on('gestion_academica')->onDelete('cascade');

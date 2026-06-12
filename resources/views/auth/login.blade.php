@@ -76,6 +76,12 @@
                                 <small>¿Olvidaste tu contraseña?</small>
                             </a>
                         </div>
+                        {{-- CU25: acceso publico al pre-registro de postulante sin iniciar sesion. --}}
+                        <div class="text-center mt-2">
+                            <a href="{{ route('postulantes.pre-registro') }}" class="text-decoration-none">
+                                <small>Pre-registrarme como postulante</small>
+                            </a>
+                        </div>
                         </form>
 
                         <hr class="my-4 d-none" hidden>

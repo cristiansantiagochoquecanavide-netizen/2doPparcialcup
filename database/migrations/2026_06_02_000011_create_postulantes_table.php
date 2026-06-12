@@ -20,7 +20,8 @@ return new class extends Migration
             $table->char('sexo', 1);
             $table->string('direccion', 150)->nullable();
             $table->string('telefono', 20)->nullable();
-            $table->string('correo', 100)->unique()->nullable();
+            // El correo es obligatorio y unico segun las validaciones del modulo de postulantes.
+            $table->string('correo', 100)->unique();
             $table->string('colegio_procedencia', 120)->nullable();
             $table->string('ciudad', 80)->nullable();
             $table->string('titulo_bachiller', 120)->nullable();

@@ -14,9 +14,12 @@ return new class extends Migration
         Schema::create('resultado_admision', function (Blueprint $table) {
             $table->bigIncrements('id_resultado');
             $table->unsignedBigInteger('id_inscripcion')->unique();
+            // CU21: promedio final general del postulante; >= 60 APROBADO, < 60 REPROBADO.
             $table->decimal('promedio_final', 5, 2);
             $table->string('estado_resultado', 20);
+            // CU22: carrera admitida segun cupos de primera opcion o segunda opcion.
             $table->unsignedBigInteger('id_carrera_admitida')->nullable();
+            // CU22: null si queda aprobado en espera por falta de cupo.
             $table->integer('orden_opcion_admitida')->nullable();
             $table->timestamp('fecha_resultado')->useCurrent();
             $table->foreign('id_inscripcion')->references('id_inscripcion')->on('inscripciones')->onDelete('cascade');

@@ -1,12 +1,12 @@
 @extends('layouts.app')
-<!-- Vista de CU1: Dashboard. Muestra accesos a los modulos despues de iniciar sesion. -->
+<!-- Vista de CU24: Dashboard administrativo con indicadores reales. -->
 
 @section('titulo', 'Dashboard')
 
 @section('contenido')
 <h1 class="page-title">
     <i class="bi bi-house"></i> Dashboard
-    <span class="badge bg-info ms-2">CU1</span>
+    <span class="badge bg-info ms-2">CU24</span>
 </h1>
 
 <div class="row mb-4">
@@ -16,130 +16,145 @@
                 <h5 class="card-title">
                     <i class="bi bi-person-check"></i> Bienvenido, {{ Auth::user()->nombre_usuario }}
                 </h5>
-                <p class="card-text text-muted">
+                <p class="card-text text-muted mb-0">
                     Rol: <strong>{{ Auth::user()->rol->nombre ?? 'Sin rol' }}</strong>
-                </p>
-                <p class="card-text">
-                    Último acceso: <strong>{{ Auth::user()->fecha_creacion->format('d/m/Y H:i') ?? 'N/A' }}</strong>
                 </p>
             </div>
         </div>
     </div>
 </div>
 
-<div class="row">
-    <div class="col-md-3">
-        <div class="card text-center">
+{{-- CU24: tarjetas principales con datos reales de la base de datos. --}}
+<div class="row g-3">
+    <div class="col-md-2">
+        <div class="card text-center h-100">
             <div class="card-body">
-                <i class="bi bi-people" style="font-size: 2.5rem; color: #3498db;"></i>
-                <h6 class="card-title mt-3">Usuarios</h6>
-                <p class="card-text" style="font-size: 1.5rem; font-weight: bold;">0</p>
-                <a href="{{ route('usuarios.index') }}" class="btn btn-sm btn-primary">Ver</a>
+                <i class="bi bi-person-lines-fill text-primary" style="font-size: 2rem;"></i>
+                <h6 class="mt-2">Inscritos</h6>
+                <p class="fs-4 fw-bold mb-0">{{ $indicadores['total_inscritos'] }}</p>
             </div>
         </div>
     </div>
-
-    <div class="col-md-3">
-        <div class="card text-center">
+    <div class="col-md-2">
+        <div class="card text-center h-100">
             <div class="card-body">
-                <i class="bi bi-shield-lock" style="font-size: 2.5rem; color: #27ae60;"></i>
-                <h6 class="card-title mt-3">Roles</h6>
-                <p class="card-text" style="font-size: 1.5rem; font-weight: bold;">0</p>
-                <a href="{{ route('roles.index') }}" class="btn btn-sm btn-success">Ver</a>
+                <i class="bi bi-check-circle text-success" style="font-size: 2rem;"></i>
+                <h6 class="mt-2">Aprobados</h6>
+                <p class="fs-4 fw-bold mb-0">{{ $indicadores['total_aprobados'] }}</p>
             </div>
         </div>
     </div>
-
-    <div class="col-md-3">
-        <div class="card text-center">
+    <div class="col-md-2">
+        <div class="card text-center h-100">
             <div class="card-body">
-                <i class="bi bi-file-person" style="font-size: 2.5rem; color: #e74c3c;"></i>
-                <h6 class="card-title mt-3">Postulantes</h6>
-                <p class="card-text" style="font-size: 1.5rem; font-weight: bold;">0</p>
-                <a href="{{ route('postulantes.index') }}" class="btn btn-sm btn-danger">Ver</a>
+                <i class="bi bi-x-circle text-danger" style="font-size: 2rem;"></i>
+                <h6 class="mt-2">Reprobados</h6>
+                <p class="fs-4 fw-bold mb-0">{{ $indicadores['total_reprobados'] }}</p>
             </div>
         </div>
     </div>
-
-    <div class="col-md-3">
-        <div class="card text-center">
+    <div class="col-md-2">
+        <div class="card text-center h-100">
             <div class="card-body">
-                <i class="bi bi-mortarboard" style="font-size: 2.5rem; color: #f39c12;"></i>
-                <h6 class="card-title mt-3">Carreras</h6>
-                <p class="card-text" style="font-size: 1.5rem; font-weight: bold;">0</p>
-                <a href="{{ route('carreras.index') }}" class="btn btn-sm btn-warning">Ver</a>
+                <i class="bi bi-collection text-warning" style="font-size: 2rem;"></i>
+                <h6 class="mt-2">Grupos</h6>
+                <p class="fs-4 fw-bold mb-0">{{ $indicadores['total_grupos_habilitados'] }}</p>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-2">
+        <div class="card text-center h-100">
+            <div class="card-body">
+                <i class="bi bi-file-person text-info" style="font-size: 2rem;"></i>
+                <h6 class="mt-2">Postulantes</h6>
+                <p class="fs-4 fw-bold mb-0">{{ $indicadores['total_postulantes'] }}</p>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-2">
+        <div class="card text-center h-100">
+            <div class="card-body">
+                <i class="bi bi-bar-chart text-secondary" style="font-size: 2rem;"></i>
+                <h6 class="mt-2">Promedio</h6>
+                <p class="fs-4 fw-bold mb-0">{{ number_format($indicadores['promedio_general'], 2) }}</p>
             </div>
         </div>
     </div>
 </div>
 
 <div class="row mt-4">
-    <div class="col-md-3">
-        <div class="card text-center">
+    <div class="col-md-6">
+        <div class="card h-100">
+            <div class="card-header">
+                <h5 class="mb-0">Estadisticas por materia</h5>
+            </div>
             <div class="card-body">
-                <i class="bi bi-collection" style="font-size: 2.5rem; color: #9b59b6;"></i>
-                <h6 class="card-title mt-3">Grupos</h6>
-                <p class="card-text" style="font-size: 1.5rem; font-weight: bold;">0</p>
-                <a href="{{ route('grupos.index') }}" class="btn btn-sm btn-primary">Ver</a>
+                {{-- CU24: tabla real de notas y promedio por materia. --}}
+                <table class="table table-sm">
+                    <thead>
+                        <tr>
+                            <th>Materia</th>
+                            <th>Notas</th>
+                            <th>Promedio</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @forelse($estadisticasMateria as $materia)
+                            <tr>
+                                <td>{{ $materia->nombre }}</td>
+                                <td>{{ $materia->total_notas }}</td>
+                                <td>{{ number_format((float) $materia->promedio, 2) }}</td>
+                            </tr>
+                        @empty
+                            <tr>
+                                <td colspan="3" class="text-muted text-center">Sin datos de notas</td>
+                            </tr>
+                        @endforelse
+                    </tbody>
+                </table>
             </div>
         </div>
     </div>
 
-    <div class="col-md-3">
-        <div class="card text-center">
-            <div class="card-body">
-                <i class="bi bi-person-badge" style="font-size: 2.5rem; color: #16a085;"></i>
-                <h6 class="card-title mt-3">Docentes</h6>
-                <p class="card-text" style="font-size: 1.5rem; font-weight: bold;">0</p>
-                <a href="{{ route('docentes.index') }}" class="btn btn-sm btn-info">Ver</a>
+    <div class="col-md-6">
+        <div class="card h-100">
+            <div class="card-header">
+                <h5 class="mb-0">Resumen por carrera</h5>
             </div>
-        </div>
-    </div>
-
-    <div class="col-md-3">
-        <div class="card text-center">
             <div class="card-body">
-                <i class="bi bi-checklist" style="font-size: 2.5rem; color: #d35400;"></i>
-                <h6 class="card-title mt-3">Requisitos</h6>
-                <p class="card-text" style="font-size: 1.5rem; font-weight: bold;">0</p>
-                <a href="{{ route('requisitos.index') }}" class="btn btn-sm btn-warning">Ver</a>
-            </div>
-        </div>
-    </div>
-
-    <div class="col-md-3">
-        <div class="card text-center">
-            <div class="card-body">
-                <i class="bi bi-clock-history" style="font-size: 2.5rem; color: #34495e;"></i>
-                <h6 class="card-title mt-3">Bitácora</h6>
-                <p class="card-text" style="font-size: 1.5rem; font-weight: bold;">0</p>
-                <a href="{{ route('bitacora.index') }}" class="btn btn-sm btn-secondary">Ver</a>
+                {{-- CU24: resumen real por carrera para postulantes y admitidos. --}}
+                <table class="table table-sm">
+                    <thead>
+                        <tr>
+                            <th>Carrera</th>
+                            <th>Postulantes 1ra opcion</th>
+                            <th>Admitidos</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @forelse($resumenCarreras as $carrera)
+                            <tr>
+                                <td>{{ $carrera->nombre }}</td>
+                                <td>{{ $carrera->postulantes_opcion_primera_count }}</td>
+                                <td>{{ $carrera->admitidos_count }}</td>
+                            </tr>
+                        @empty
+                            <tr>
+                                <td colspan="3" class="text-muted text-center">Sin carreras registradas</td>
+                            </tr>
+                        @endforelse
+                    </tbody>
+                </table>
             </div>
         </div>
     </div>
 </div>
 
-<div class="row mt-5">
+<div class="row mt-4">
     <div class="col-md-12">
-        <div class="card">
-            <div class="card-header">
-                <h5 class="mb-0">
-                    <i class="bi bi-info-circle"></i> Información del Sistema
-                </h5>
-            </div>
-            <div class="card-body">
-                <div class="row">
-                    <div class="col-md-6">
-                        <p><strong>Versión:</strong> 1.0.0 (Ciclo 1)</p>
-                        <p><strong>Base de Datos:</strong> PostgreSQL - cupficct1</p>
-                    </div>
-                    <div class="col-md-6">
-                        <p><strong>Última Actualización:</strong> {{ date('d/m/Y H:i') }}</p>
-                        <p><strong>Servidor:</strong> Laravel 11</p>
-                    </div>
-                </div>
-            </div>
-        </div>
+        <a href="{{ route('reportes.index') }}" class="btn btn-primary">
+            <i class="bi bi-file-earmark-bar-graph"></i> Ver reportes
+        </a>
     </div>
 </div>
 @endsection

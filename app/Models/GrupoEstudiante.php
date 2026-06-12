@@ -18,7 +18,9 @@ class GrupoEstudiante extends Model
     public $timestamps = false;
 
     protected $fillable = [
+        // CU13: el grupo debe estar activo y tener cupo disponible antes de asignar.
         'id_grupo',
+        // CU13: la inscripcion debe existir y no debe estar asignada a otro grupo.
         'id_inscripcion',
         'fecha_asignacion'
     ];

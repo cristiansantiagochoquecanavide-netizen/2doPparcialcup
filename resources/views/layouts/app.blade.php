@@ -178,6 +178,9 @@
                     </a>
 
                     <h6 class="text-uppercase text-muted ps-3 mt-4">Auditoría</h6>
+                    <a href="{{ route('reportes.index') }}" class="@if(request()->routeIs('reportes.*')) active @endif">
+                        <i class="bi bi-file-earmark-bar-graph"></i> Reportes
+                    </a>
                     <a href="{{ route('bitacora.index') }}" class="@if(request()->routeIs('bitacora.*')) active @endif">
                         <i class="bi bi-clock-history"></i> Bitácora
                     </a>

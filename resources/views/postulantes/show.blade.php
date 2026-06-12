@@ -13,34 +13,101 @@
     <div class="col-md-8">
         <div class="card">
             <div class="card-header">
-                <h5 class="mb-0">Información Personal</h5>
+                <h5 class="mb-0">Datos del Postulante</h5>
             </div>
             <div class="card-body">
+                {{-- Se muestran todos los datos personales obligatorios del registro. --}}
                 <div class="row mb-3">
-                    <div class="col-md-6">
+                    <div class="col-md-4">
                         <h6 class="text-muted">CI</h6>
                         <p><strong>{{ $postulante->ci }}</strong></p>
                     </div>
-                    <div class="col-md-6">
-                        <h6 class="text-muted">Sexo</h6>
-                        <p><strong>{{ $postulante->sexo === 'M' ? 'Masculino' : 'Femenino' }}</strong></p>
+                    <div class="col-md-4">
+                        <h6 class="text-muted">Nombres</h6>
+                        <p>{{ $postulante->nombres }}</p>
+                    </div>
+                    <div class="col-md-4">
+                        <h6 class="text-muted">Apellidos</h6>
+                        <p>{{ $postulante->apellidos }}</p>
                     </div>
                 </div>
 
+                {{-- Datos administrativos principales del postulante. --}}
+                <div class="row mb-3">
+                    <div class="col-md-4">
+                        <h6 class="text-muted">Fecha de nacimiento</h6>
+                        <p>{{ $postulante->fecha_nacimiento?->format('d/m/Y') ?? '-' }}</p>
+                    </div>
+                    <div class="col-md-4">
+                        <h6 class="text-muted">Sexo</h6>
+                        <p>{{ $postulante->sexo === 'M' ? 'Masculino' : 'Femenino' }}</p>
+                    </div>
+                    <div class="col-md-4">
+                        <h6 class="text-muted">Estado</h6>
+                        @php
+                            $color = match($postulante->estado) {
+                                'PENDIENTE_VALIDACION' => 'secondary',
+                                'REGISTRADO' => 'warning',
+                                'VALIDADO' => 'info',
+                                'INSCRITO' => 'success',
+                                'RECHAZADO' => 'danger',
+                                default => 'secondary'
+                            };
+                        @endphp
+                        <p><span class="badge bg-{{ $color }}">{{ $postulante->estado }}</span></p>
+                    </div>
+                </div>
+
+                {{-- Datos de contacto registrados en crear/editar. --}}
                 <div class="row mb-3">
                     <div class="col-md-6">
-                        <h6 class="text-muted">Correo</h6>
-                        <p>{{ $postulante->correo ?? '-' }}</p>
+                        <h6 class="text-muted">Correo electronico</h6>
+                        <p>{{ $postulante->correo }}</p>
                     </div>
                     <div class="col-md-6">
-                        <h6 class="text-muted">Fecha de Nacimiento</h6>
-                        <p>{{ $postulante->fecha_nacimiento?->format('d/m/Y') ?? '-' }}</p>
+                        <h6 class="text-muted">Telefono</h6>
+                        <p>{{ $postulante->telefono ?? '-' }}</p>
                     </div>
                 </div>
 
                 <div class="mb-3">
-                    <h6 class="text-muted">Fecha Presentación Formulario</h6>
-                    <p>{{ $postulante->fecha_presentacion_formulario?->format('d/m/Y') ?? '-' }}</p>
+                    <h6 class="text-muted">Direccion</h6>
+                    <p>{{ $postulante->direccion ?? '-' }}</p>
+                </div>
+
+                {{-- Procedencia academica del postulante. --}}
+                <div class="row mb-3">
+                    <div class="col-md-6">
+                        <h6 class="text-muted">Colegio de procedencia</h6>
+                        <p>{{ $postulante->colegio_procedencia ?? '-' }}</p>
+                    </div>
+                    <div class="col-md-6">
+                        <h6 class="text-muted">Ciudad</h6>
+                        <p>{{ $postulante->ciudad ?? '-' }}</p>
+                    </div>
+                </div>
+
+                {{-- Opciones de carrera relacionadas con la tabla carreras. --}}
+                <div class="row mb-3">
+                    <div class="col-md-6">
+                        <h6 class="text-muted">Carrera de primera opcion</h6>
+                        <p>{{ $postulante->carreraOpcionPrimera->nombre ?? '-' }}</p>
+                    </div>
+                    <div class="col-md-6">
+                        <h6 class="text-muted">Carrera de segunda opcion</h6>
+                        <p>{{ $postulante->carreraOpcionSegunda->nombre ?? '-' }}</p>
+                    </div>
+                </div>
+
+                {{-- Documentacion y observaciones adicionales. --}}
+                <div class="mb-3">
+                    <h6 class="text-muted">Titulo de bachiller</h6>
+                    <p>{{ $postulante->titulo_bachiller ?? '-' }}</p>
+                </div>
+
+                <div class="mb-3">
+                    <h6 class="text-muted">Otros requisitos</h6>
+                    <p>{{ $postulante->otros_requisitos ?? '-' }}</p>
                 </div>
 
                 <div class="d-flex gap-2">
@@ -58,62 +125,27 @@
     <div class="col-md-4">
         <div class="card">
             <div class="card-header">
-                <h5 class="mb-0">Estado</h5>
+                <h5 class="mb-0">Requisitos validados</h5>
             </div>
             <div class="card-body">
-                @php
-                    $color = match($postulante->estado) {
-                        'REGISTRADO' => 'warning',
-                        'VALIDADO' => 'info',
-                        'INSCRITO' => 'success',
-                        'RECHAZADO' => 'danger',
-                        default => 'secondary'
-                    };
-                @endphp
-                <p class="mb-3">
-                    <span class="badge bg-{{ $color }} p-3">{{ $postulante->estado }}</span>
-                </p>
-            </div>
-        </div>
-
-        <div class="card mt-3">
-            <div class="card-header">
-                <h5 class="mb-0">Opciones de Carrera</h5>
-            </div>
-            <div class="card-body">
-                <p><strong>1ª Opción:</strong></p>
-                <p>{{ $postulante->carreraOpcionPrimera->nombre ?? '-' }}</p>
-                
-                <hr>
-                
-                <p><strong>2ª Opción:</strong></p>
-                <p>{{ $postulante->carreraOpcionSegunda->nombre ?? '-' }}</p>
-            </div>
-        </div>
-
-        <div class="card mt-3">
-            <div class="card-header">
-                <h5 class="mb-0">Requisitos</h5>
-            </div>
-            <div class="card-body">
+                {{-- Lista los requisitos vinculados al postulante desde la tabla pivote. --}}
                 @if($postulante->requisitos->count() > 0)
-                    <ul class="list-unstyled">
+                    <ul class="list-unstyled mb-0">
                         @foreach($postulante->requisitos as $req)
                             <li class="mb-2">
                                 {{ $req->nombre }}
                                 <br>
                                 <small class="text-muted">
-                                    @if($req->pivot->fecha_validacion)
-                                        Validado: {{ $req->pivot->fecha_validacion->format('d/m/Y') }}
-                                    @else
-                                        Pendiente
+                                    {{ $req->pivot->presentado ? 'Presentado' : 'Pendiente' }}
+                                    @if($req->pivot->fecha_presentacion)
+                                        - {{ \Illuminate\Support\Carbon::parse($req->pivot->fecha_presentacion)->format('d/m/Y') }}
                                     @endif
                                 </small>
                             </li>
                         @endforeach
                     </ul>
                 @else
-                    <p class="text-muted small">Sin requisitos asignados</p>
+                    <p class="text-muted small mb-0">Sin requisitos asignados</p>
                 @endif
             </div>
         </div>

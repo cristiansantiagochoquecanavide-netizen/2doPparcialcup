@@ -97,6 +97,8 @@ return [
             'prefix_indexes' => true,
             'search_path' => 'public',
             'sslmode' => env('DB_SSLMODE', 'prefer'),
+            // Neon requiere el endpoint explicito cuando el cliente libpq no soporta SNI.
+            'endpoint' => env('DB_ENDPOINT'),
         ],
 
         'sqlsrv' => [

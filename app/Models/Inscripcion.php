@@ -5,6 +5,10 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 
+/**
+ * Modelo Inscripcion.
+ * Soporta el CU9: formalizar la inscripcion despues de requisitos completos y pago confirmado.
+ */
 class Inscripcion extends Model
 {
     use HasFactory;
@@ -14,7 +18,9 @@ class Inscripcion extends Model
     public $timestamps = false;
 
     protected $fillable = [
+        // CU9: debe validarse que el postulante exista y no tenga inscripcion duplicada en la gestion.
         'id_postulante',
+        // CU9: la gestion academica debe estar activa al registrar la inscripcion.
         'id_gestion',
         'fecha_inscripcion',
         'estado_inscripcion'
@@ -25,7 +31,7 @@ class Inscripcion extends Model
         'estado_inscripcion' => 'string'
     ];
 
-    // Relaciones
+    // CU9: la inscripcion pertenece al postulante que cumplio requisitos y pago.
     public function postulante()
     {
         return $this->belongsTo(Postulante::class, 'id_postulante');
@@ -38,6 +44,7 @@ class Inscripcion extends Model
 
     public function grupoEstudiante()
     {
+        // CU13: una inscripcion puede asignarse como maximo a un grupo en la gestion.
         return $this->hasOne(GrupoEstudiante::class, 'id_inscripcion');
     }
 
@@ -48,6 +55,7 @@ class Inscripcion extends Model
 
     public function notas()
     {
+        // Cada estudiante inscrito registra notas por evaluacion de cada materia.
         return $this->hasMany(Nota::class, 'id_inscripcion');
     }
 

@@ -5,6 +5,7 @@ namespace Database\Seeders;
 use App\Models\Rol;
 use App\Models\Permiso;
 use App\Models\Usuario;
+use App\Models\Materia;
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\Hash;
@@ -108,9 +109,28 @@ class DatosInicialesSeeder extends Seeder
             ]
         );
 
+        // CU15: materias oficiales del CUP que deben existir como datos base.
+        $materiasCup = [
+            'Computación',
+            'Matemáticas',
+            'Inglés',
+            'Física',
+        ];
+
+        foreach ($materiasCup as $materia) {
+            Materia::firstOrCreate(
+                ['nombre' => $materia],
+                [
+                    'descripcion' => 'Materia oficial del CUP',
+                    'estado' => 'ACTIVA'
+                ]
+            );
+        }
+
         $this->command->info('Datos iniciales procesados exitosamente:');
         $this->command->info('- 4 Roles');
         $this->command->info('- 8 Permisos');
         $this->command->info('- 1 Usuario Administrador (admin / admin123)');
+        $this->command->info('- 4 Materias oficiales del CUP');
     }
 }

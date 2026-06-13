@@ -1,0 +1,42 @@
+services:
+  - type: web
+    name: cup-ficct
+    env: docker
+    plan: free
+    dockerfilePath: ./Dockerfile
+    healthCheckPath: /login
+    envVars:
+      - key: APP_ENV
+        value: production
+      - key: APP_DEBUG
+        value: false
+      - key: APP_URL
+        sync: false
+      - key: APP_KEY
+        sync: false
+      - key: DB_CONNECTION
+        value: pgsql
+      - key: DB_HOST
+        sync: false
+      - key: DB_PORT
+        value: 5432
+      - key: DB_DATABASE
+        sync: false
+      - key: DB_USERNAME
+        sync: false
+      - key: DB_PASSWORD
+        sync: false
+      - key: DB_SSLMODE
+        value: require
+      - key: DB_ENDPOINT
+        value: ep-curly-river-ailnx4ev
+      - key: CACHE_STORE
+        value: file
+      - key: SESSION_DRIVER
+        value: file
+      - key: QUEUE_CONNECTION
+        value: sync
+      - key: LOG_CHANNEL
+        value: stderr
+      - key: RUN_MIGRATIONS
+        value: true
